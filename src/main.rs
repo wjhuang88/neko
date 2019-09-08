@@ -112,14 +112,14 @@ fn main() {
     );
 
     let (texture, tex_future) = {
-        let image = image::load_from_memory_with_format(include_bytes!("IMG_2483.JPG"),
-                                                        ImageFormat::JPEG).unwrap().to_rgba();
+        let image = image::load_from_memory_with_format(include_bytes!("image_img.png"),
+                                                        ImageFormat::PNG).unwrap().to_rgba();
 
         let image_data = image.into_raw().clone();
 
         ImmutableImage::from_iter(
             image_data.iter().cloned(),
-            Dimensions::Dim2d { width: 1080, height: 1080 },
+            Dimensions::Dim2d { width: 845, height: 845 },
             Format::R8G8B8A8Srgb,
             queue.clone()
         ).unwrap()
@@ -248,27 +248,13 @@ fn window_size_dependent_setup(
 mod vs {
     vulkano_shaders::shader!{
         ty: "vertex",
-        src: "
-#version 450
-layout(location = 0) in vec2 position;
-layout(location = 0) out vec2 tex_coords;
-void main() {
-    gl_Position = vec4(position, 0.0, 1.0);
-    tex_coords = position + vec2(0.5);
-}"
+        path: "src/shaders/vert.glsl"
     }
 }
 
 mod fs {
     vulkano_shaders::shader!{
         ty: "fragment",
-        src: "
-#version 450
-layout(location = 0) in vec2 tex_coords;
-layout(location = 0) out vec4 f_color;
-layout(set = 0, binding = 0) uniform sampler2D tex;
-void main() {
-    f_color = texture(tex, tex_coords);
-}"
+        path: "src/shaders/frag.glsl"
     }
 }
