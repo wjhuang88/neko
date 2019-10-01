@@ -115,11 +115,13 @@ fn main() {
         let image = image::load_from_memory_with_format(include_bytes!("image_img.png"),
                                                         ImageFormat::PNG).unwrap().to_rgba();
 
+        let image_width = (&image).width();
+        let image_height = (&image).height();
         let image_data = image.into_raw().clone();
 
         ImmutableImage::from_iter(
             image_data.iter().cloned(),
-            Dimensions::Dim2d { width: 845, height: 845 },
+            Dimensions::Dim2d { width: image_width, height: image_height },
             Format::R8G8B8A8Srgb,
             queue.clone()
         ).unwrap()
